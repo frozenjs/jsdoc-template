@@ -24,7 +24,7 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 </head>
-<body class="language-javascript">
+<body class="language-javascript <?js if(_(docs).chain().pluck('kind').contains('examplepage').value()){ ?> examplepage <?js } ?>">
   <header class="header">
     <?js docs.forEach(function(doc, i){ ?>
       <?js if (doc.kind === 'package') { ?>
@@ -40,9 +40,11 @@
     </nav>
   </header>
 
-  <nav class="sidebar">
-    <?js= this.nav ?>
-  </nav>
+  <?js if(!_(docs).chain().pluck('kind').contains('examplepage').value()){ ?>
+    <nav class="sidebar">
+      <?js= this.nav ?>
+    </nav>
+  <?js } ?>
 
   <div class="main">
     <?js= content ?>

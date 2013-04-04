@@ -441,9 +441,35 @@ exports.publish = function(taffyData, opts, tutorials) {
         ).concat(files),
     indexUrl);
 
+    var exampleDir = process.cwd() + '/examples/';
+    var exampleFolders = fs.readdirSync(exampleDir).filter(function(dir){
+        return fs.statSync(exampleDir + dir).isDirectory() && !(dir === 'styles' || dir === 'scripts');
+    });
+
+    var exampleObjects = exampleFolders.map(function(dir){
+        var exampleObject = {
+            name: dir,
+            description: '',
+            url: '/examples/' + dir,
+            position: 1000
+        };
+        if(fs.existsSync(exampleDir + dir + '/package.json')){
+            var packageJSON = fs.readFileSync(exampleDir + dir + '/package.json', 'utf8');
+            try {
+                packageJSON = JSON.parse(packageJSON);
+                exampleObject.name = packageJSON.name;
+                exampleObject.description = packageJSON.description;
+                exampleObject.position = packageJSON.position;
+            } catch(e){
+                exampleObject.error = e;
+            }
+        }
+        return exampleObject;
+    });
+
     generate('Examples',
         packages.concat(
-            [{kind: 'examplepage'}]
+            [{kind: 'examplepage', exampleObjects: exampleObjects}]
         ), helper.getUniqueFilename('examples'));
 
     // set up the lists that we'll use to generate pages
