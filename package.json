@@ -1,12 +1,6 @@
 {
   "name": "frozen-jsdoc-template",
   "version": "0.1.1",
-  "dependencies": {
-    "volo": "~0.2.10"
-  },
-  "scripts": {
-    "install": "volo add"
-  },
   "volo": {
     "dependencies": {
       "static": "github:iceddev/site-assets/master"
